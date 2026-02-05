@@ -4,12 +4,36 @@ Shared LLM client library for OpenAI-compatible APIs.
 
 ## Installation
 
-```bash
-pip install lsimons-llm
+### As a dependency in other projects
+
+Add to your `pyproject.toml`:
+
+```toml
+dependencies = [
+    "lsimons-llm @ git+https://github.com/lsimons-bot/lsimons-llm.git",
+]
 
 # For async support
-pip install lsimons-llm[async]
+dependencies = [
+    "lsimons-llm[async] @ git+https://github.com/lsimons-bot/lsimons-llm.git",
+]
 ```
+
+### Local development setup
+
+When developing lsimons-llm alongside dependent projects, use editable installs to see changes immediately:
+
+```bash
+# In each dependent project directory (lsimons-bot, quarto4sbp, lsimons-agent)
+uv pip install -e ../lsimons-llm
+```
+
+This overrides the git dependency with your local copy. Changes to lsimons-llm are available without pushing.
+
+**Projects using this library:**
+- [lsimons-bot](https://github.com/lsimons-bot/lsimons-bot-code) - Slack bot (async client)
+- [quarto4sbp](https://github.com/lsimons-bot/quarto4sbp) - Quarto document tool (sync client)
+- [lsimons-agent](https://github.com/lsimons-bot/lsimons-agent) - AI coding agent (sync client)
 
 ## Configuration
 
