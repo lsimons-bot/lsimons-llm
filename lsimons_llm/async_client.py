@@ -9,7 +9,6 @@ from lsimons_llm.config import LLMConfig
 from lsimons_llm.exceptions import LLMRequestError, LLMResponseError
 
 if TYPE_CHECKING:
-    from openai import AsyncOpenAI
     from openai.types.chat import ChatCompletionMessageParam
 
 
