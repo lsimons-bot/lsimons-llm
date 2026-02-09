@@ -146,7 +146,7 @@ uv run ruff check .
 uv run ruff format .
 
 # Type check
-uv run pyright
+uv run basedpyright
 ```
 
 ## License

@@ -113,7 +113,7 @@ class LLMClient:
         """Close the HTTP client."""
         self._client.close()
 
-    def __enter__(self) -> "LLMClient":
+    def __enter__(self) -> LLMClient:
         return self
 
     def __exit__(self, *args: object) -> None:

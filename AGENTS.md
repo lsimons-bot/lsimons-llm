@@ -6,7 +6,7 @@ Shared LLM client library for OpenAI-compatible APIs. Provides sync and async cl
 
 - **Setup**: `uv venv && uv sync --all-groups`
 - **Test**: `uv run pytest`
-- **Lint**: `uv run ruff check . && uv run pyright`
+- **Lint**: `uv run ruff check . && uv run basedpyright`
 - **Format**: `uv run ruff format .`
 
 ## Structure
@@ -48,7 +48,7 @@ Work is NOT complete until `git push` succeeds.
 1. **Quality gates** (if code changed):
    ```bash
    uv run pytest
-   uv run ruff check . && uv run pyright
+   uv run ruff check . && uv run basedpyright
    ```
 
 2. **Push**:

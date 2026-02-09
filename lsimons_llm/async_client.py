@@ -103,7 +103,7 @@ class AsyncLLMClient:
         """Close the async HTTP client."""
         await self._client.close()
 
-    async def __aenter__(self) -> "AsyncLLMClient":
+    async def __aenter__(self) -> AsyncLLMClient:
         return self
 
     async def __aexit__(self, *args: object) -> None:
