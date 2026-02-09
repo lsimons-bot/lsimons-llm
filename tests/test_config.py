@@ -1,7 +1,5 @@
 """Tests for LLM configuration."""
 
-import os
-
 import pytest
 
 from lsimons_llm.config import LLMConfig, load_config

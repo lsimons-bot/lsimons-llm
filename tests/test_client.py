@@ -1,13 +1,16 @@
 """Tests for synchronous LLM client."""
 
-import json
 from typing import Any
 from unittest.mock import MagicMock, patch
 
 import httpx
 import pytest
 
-from lsimons_llm.client import LLMClient, _extract_content, chat
+from lsimons_llm.client import (
+    LLMClient,
+    _extract_content,  # pyright: ignore[reportPrivateUsage]
+    chat,
+)
 from lsimons_llm.config import LLMConfig
 from lsimons_llm.exceptions import LLMRequestError, LLMResponseError
 
@@ -40,9 +43,7 @@ def mock_response() -> dict[str, Any]:
 
 
 class TestLLMClient:
-    def test_chat_returns_content(
-        self, config: LLMConfig, mock_response: dict[str, Any]
-    ) -> None:
+    def test_chat_returns_content(self, config: LLMConfig, mock_response: dict[str, Any]) -> None:
         with patch.object(httpx.Client, "post") as mock_post:
             mock_resp = MagicMock()
             mock_resp.json.return_value = mock_response
@@ -175,6 +176,45 @@ class TestExtractContent:
     def test_raises_on_no_content(self) -> None:
         with pytest.raises(LLMResponseError, match="No content"):
             _extract_content({"choices": [{"message": {}}]})
+
+
+class TestLLMClientErrors:
+    def test_chat_retries_on_network_error(self, config: LLMConfig) -> None:
+        with patch.object(httpx.Client, "post") as mock_post:
+            mock_post.side_effect = [
+                httpx.RequestError("Connection failed"),
+                MagicMock(
+                    json=MagicMock(return_value={"choices": [{"message": {"content": "ok"}}]}),
+                    raise_for_status=MagicMock(return_value=None),
+                ),
+            ]
+
+            client = LLMClient(config)
+            with patch("time.sleep"):
+                result = client.chat([{"role": "user", "content": "test"}])
+
+            assert result == "ok"
+            assert mock_post.call_count == 2
+
+    def test_chat_raises_after_all_retries_exhausted(self, config: LLMConfig) -> None:
+        with patch.object(httpx.Client, "post") as mock_post:
+            mock_post.side_effect = httpx.RequestError("Connection failed")
+
+            client = LLMClient(config)
+            with (
+                patch("time.sleep"),
+                pytest.raises(LLMRequestError, match="Connection failed"),
+            ):
+                client.chat([{"role": "user", "content": "test"}])
+
+            assert mock_post.call_count == config.max_retries
+
+
+class TestExtractContentErrors:
+    def test_raises_on_malformed_response(self) -> None:
+        # Response where choices is not a list, causing TypeError on indexing
+        with pytest.raises(LLMResponseError, match="Failed to parse response"):
+            _extract_content({"choices": 123})
 
 
 class TestChatFunction:
