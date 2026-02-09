@@ -43,9 +43,7 @@ def mock_response() -> dict[str, Any]:
 
 
 class TestLLMClient:
-    def test_chat_returns_content(
-        self, config: LLMConfig, mock_response: dict[str, Any]
-    ) -> None:
+    def test_chat_returns_content(self, config: LLMConfig, mock_response: dict[str, Any]) -> None:
         with patch.object(httpx.Client, "post") as mock_post:
             mock_resp = MagicMock()
             mock_resp.json.return_value = mock_response
@@ -186,9 +184,7 @@ class TestLLMClientErrors:
             mock_post.side_effect = [
                 httpx.RequestError("Connection failed"),
                 MagicMock(
-                    json=MagicMock(
-                        return_value={"choices": [{"message": {"content": "ok"}}]}
-                    ),
+                    json=MagicMock(return_value={"choices": [{"message": {"content": "ok"}}]}),
                     raise_for_status=MagicMock(return_value=None),
                 ),
             ]

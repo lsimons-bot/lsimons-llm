@@ -29,9 +29,7 @@ def mock_response() -> MagicMock:
 
 
 class TestAsyncLLMClient:
-    async def test_chat_returns_content(
-        self, config: LLMConfig, mock_response: MagicMock
-    ) -> None:
+    async def test_chat_returns_content(self, config: LLMConfig, mock_response: MagicMock) -> None:
         with (
             patch.dict("sys.modules", {"openai": MagicMock()}),
             patch("openai.AsyncOpenAI") as mock_openai,
@@ -48,9 +46,7 @@ class TestAsyncLLMClient:
 
             assert result == "Hello! How can I help?"
 
-    async def test_chat_with_overrides(
-        self, config: LLMConfig, mock_response: MagicMock
-    ) -> None:
+    async def test_chat_with_overrides(self, config: LLMConfig, mock_response: MagicMock) -> None:
         with (
             patch.dict("sys.modules", {"openai": MagicMock()}),
             patch("openai.AsyncOpenAI") as mock_openai,
@@ -84,9 +80,7 @@ class TestAsyncLLMClient:
             no_choices_response.choices = []
 
             mock_client = MagicMock()
-            mock_client.chat.completions.create = AsyncMock(
-                return_value=no_choices_response
-            )
+            mock_client.chat.completions.create = AsyncMock(return_value=no_choices_response)
             mock_client.close = AsyncMock()
             mock_openai.return_value = mock_client
 
@@ -105,9 +99,7 @@ class TestAsyncLLMClient:
             no_content_response.choices = [MagicMock(message=MagicMock(content=None))]
 
             mock_client = MagicMock()
-            mock_client.chat.completions.create = AsyncMock(
-                return_value=no_content_response
-            )
+            mock_client.chat.completions.create = AsyncMock(return_value=no_content_response)
             mock_client.close = AsyncMock()
             mock_openai.return_value = mock_client
 
@@ -117,17 +109,13 @@ class TestAsyncLLMClient:
             with pytest.raises(LLMResponseError, match="No content"):
                 await client.chat([{"role": "user", "content": "test"}])
 
-    async def test_chat_raises_request_error_on_exception(
-        self, config: LLMConfig
-    ) -> None:
+    async def test_chat_raises_request_error_on_exception(self, config: LLMConfig) -> None:
         with (
             patch.dict("sys.modules", {"openai": MagicMock()}),
             patch("openai.AsyncOpenAI") as mock_openai,
         ):
             mock_client = MagicMock()
-            mock_client.chat.completions.create = AsyncMock(
-                side_effect=Exception("API error")
-            )
+            mock_client.chat.completions.create = AsyncMock(side_effect=Exception("API error"))
             mock_client.close = AsyncMock()
             mock_openai.return_value = mock_client
 
@@ -137,9 +125,7 @@ class TestAsyncLLMClient:
             with pytest.raises(LLMRequestError, match="API error"):
                 await client.chat([{"role": "user", "content": "test"}])
 
-    async def test_context_manager(
-        self, config: LLMConfig, mock_response: MagicMock
-    ) -> None:
+    async def test_context_manager(self, config: LLMConfig, mock_response: MagicMock) -> None:
         with (
             patch.dict("sys.modules", {"openai": MagicMock()}),
             patch("openai.AsyncOpenAI") as mock_openai,
@@ -158,9 +144,7 @@ class TestAsyncLLMClient:
 
 
 class TestAsyncLLMClientImportError:
-    def test_raises_import_error_when_openai_not_installed(
-        self, config: LLMConfig
-    ) -> None:
+    def test_raises_import_error_when_openai_not_installed(self, config: LLMConfig) -> None:
         import sys
 
         # Temporarily remove openai from modules if present
