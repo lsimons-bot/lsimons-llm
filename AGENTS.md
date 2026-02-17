@@ -1,5 +1,7 @@
 # Agent Instructions for lsimons-llm
 
+> This file (`AGENTS.md`) is the canonical agent configuration. `CLAUDE.md` is a symlink to this file.
+
 Shared LLM client library for OpenAI-compatible APIs. Provides sync and async clients with unified configuration.
 
 ## Quick Reference
