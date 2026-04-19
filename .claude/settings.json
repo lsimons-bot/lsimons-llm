@@ -1,0 +1,18 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(mise run install)",
+      "Bash(mise run lint)",
+      "Bash(mise run format)",
+      "Bash(mise run typecheck)",
+      "Bash(mise run test)",
+      "Bash(mise run ci)",
+      "Bash(mise run install *)",
+      "Bash(mise run lint *)",
+      "Bash(mise run format *)",
+      "Bash(mise run typecheck *)",
+      "Bash(mise run test *)",
+      "Bash(mise run ci *)"
+    ]
+  }
+}
