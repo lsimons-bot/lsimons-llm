@@ -6,10 +6,13 @@ Shared LLM client library for OpenAI-compatible APIs. Provides sync and async cl
 
 ## Quick Reference
 
-- **Setup**: `uv venv && uv sync --all-groups`
-- **Test**: `uv run pytest`
-- **Lint**: `uv run ruff check . && uv run basedpyright`
-- **Format**: `uv run ruff format .`
+- **One-time**: `mise install`
+- **Setup**: `mise run install` (or `uv sync --all-groups`)
+- **Test**: `mise run test` (or `uv run pytest`)
+- **Lint**: `mise run lint` (ruff check + format --check)
+- **Typecheck**: `mise run typecheck` (basedpyright)
+- **Format**: `mise run format` (or `uv run ruff format .`)
+- **Full CI gate**: `mise run ci`
 
 ## Structure
 
@@ -49,8 +52,7 @@ Work is NOT complete until `git push` succeeds.
 
 1. **Quality gates** (if code changed):
    ```bash
-   uv run pytest
-   uv run ruff check . && uv run basedpyright
+   mise run ci
    ```
 
 2. **Push**:
